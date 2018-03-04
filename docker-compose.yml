@@ -1,0 +1,41 @@
+version: "3.0"
+services:
+
+  aspnetbuilder:
+    build:
+      context: ./
+      dockerfile: Dockerfile-builder
+    image: drprado2/aspnet-builder
+    volumes:
+      - aspnet-publish:/publish
+
+  aspnethost:
+    build:
+      context:  ./
+      dockerfile: Dockerfile-host
+    image: drprado2/aspnet-host
+    volumes:
+      - aspnet-publish:/app
+    depends_on:
+      - aspnetbuilder
+
+  reverseproxy:
+    build:
+      context: ./
+      dockerfile: Dockerfile-reverse-proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    ports:
+      - 80:80
+    depends_on:
+      - aspnethost
+    
+
+volumes:
+  aspnet-publish:
+
+networks:
+ 
+  builder:
+ 
+  host:

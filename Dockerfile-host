@@ -1,0 +1,9 @@
+FROM microsoft/aspnetcore:2.0
+
+LABEL maintainer="drprado2@gmail.com"
+
+WORKDIR /app
+
+ENTRYPOINT ["dotnet", "api.dll"]
+
+
